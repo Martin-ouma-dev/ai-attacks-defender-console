@@ -163,7 +163,7 @@ function App() {
           <div className="flex items-center gap-3">
             <div className="grid h-10 w-10 place-items-center rounded-xl border border-electric/70 bg-electric/10 text-electric shadow-glow"><ShieldCheck size={21} /></div>
             <div>
-              <div className="text-sm font-extrabold tracking-tight text-cyan md:text-[17px]">AI-ATTACKS DEFENDER</div>
+              <div className="text-sm font-extrabold tracking-tight text-cyan md:text-[17px]">AI-ATTACKS DEFENDER CONSOLE</div>
               <div className="font-mono text-[9px] tracking-[.18em] text-slate/70">FINANCIAL SERVICES COMMAND</div>
             </div>
           </div>
@@ -172,19 +172,18 @@ function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1440px] px-5 pb-28 pt-28 md:pl-[292px] md:pr-10 lg:pr-14">
+      <main className="mx-auto max-w-[1440px] px-4 pb-28 pt-24 sm:px-5 md:pl-[292px] md:pr-10 lg:pr-14">
         {active !== "Dashboard" && <div className="mb-7" />}
         {active === "Dashboard" ? <>
-        <section className="mb-8 flex flex-col items-center gap-5 text-center">
-          <div><div className="eyebrow">Cyber Sentinel Alpha / Hybrid defense model</div><h1 className="mt-3 text-4xl font-bold tracking-[-.03em] text-white md:text-5xl">AI-Attacks Defender Console</h1><p className="mx-auto mt-3 max-w-3xl text-left text-sm leading-6 text-slate">Continuous detection and containment for adversarial prompts, identity abuse, deepfakes, and anomalous transaction behavior.</p></div>
-          <div className="rounded-full border border-electric/25 bg-electric/10 px-4 py-2 font-mono text-[10px] font-bold tracking-widest text-cyan shadow-glow">● DEFENSE FABRIC ONLINE</div>
+        <section className="mb-5 flex justify-center">
+          <div className="rounded-full border border-electric/25 bg-electric/10 px-4 py-2 text-center font-mono text-[10px] font-bold tracking-widest text-cyan shadow-glow">● DEFENSE FABRIC ONLINE</div>
         </section>
 
         <div className="grid gap-5 xl:grid-cols-12">
-          <section className="panel relative overflow-hidden p-7 xl:col-span-5">
+          <section className="panel relative overflow-hidden p-5 sm:p-7 xl:col-span-5">
             <div className="scanline" />
             <div className="eyebrow text-center">Threat assessment score</div>
-            <div className="mx-auto my-8 grid h-60 w-60 place-items-center rounded-full border border-electric/40 shadow-[0_0_0_18px_rgba(56,189,248,.05),0_0_45px_rgba(56,189,248,.28)]">
+            <div className="mx-auto my-7 grid h-52 w-52 place-items-center rounded-full border border-electric/40 shadow-[0_0_0_18px_rgba(56,189,248,.05),0_0_45px_rgba(56,189,248,.28)] sm:my-8 sm:h-60 sm:w-60">
               <div className="grid h-40 w-40 place-items-center rounded-full border border-dashed border-electric/30"><div className="text-center"><ShieldEllipsis size={52} className="mx-auto text-electric" /><div className="mt-2 font-mono text-lg font-bold tracking-[.2em] text-cyan">SAFE</div></div></div>
             </div>
             <h2 className="text-center text-xl font-semibold text-white">System Protected</h2>
