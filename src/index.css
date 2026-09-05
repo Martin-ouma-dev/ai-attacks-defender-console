@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { margin: 0; min-width: 320px; background: #071426; }
+  button { font: inherit; }
+}
+
+@layer components {
+  .panel { @apply rounded-xl border border-electric/15 bg-white/[.045] shadow-inner backdrop-blur-xl; }
+  .eyebrow { @apply font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-electric; }
+  .scanline { @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-electric to-transparent opacity-50; animation: scan 4s linear infinite; }
+}
+
+@keyframes scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(420px); }
+}
