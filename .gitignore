@@ -34,3 +34,10 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Common build folders
+bin-debug/
+bin-release/
+[Oo]bj/
+[Bb]in/
+.settings/
