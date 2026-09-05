@@ -176,7 +176,7 @@ function App() {
         {active !== "Dashboard" && <div className="mb-7" />}
         {active === "Dashboard" ? <>
         <section className="mb-8 flex flex-col items-center gap-5 text-center">
-          <div><div className="eyebrow">Cyber Sentinel Alpha / Hybrid defense model</div><h1 className="mt-3 text-4xl font-bold tracking-[-.03em] text-white md:text-5xl">AI-Attacks Defender Console</h1><p className="mx-auto mt-3 max-w-3xl text-sm leading-6 text-slate">Continuous detection and containment for adversarial prompts, identity abuse, deepfakes, and anomalous transaction behavior.</p></div>
+          <div><div className="eyebrow">Cyber Sentinel Alpha / Hybrid defense model</div><h1 className="mt-3 text-4xl font-bold tracking-[-.03em] text-white md:text-5xl">AI-Attacks Defender Console</h1><p className="mx-auto mt-3 max-w-3xl text-left text-sm leading-6 text-slate">Continuous detection and containment for adversarial prompts, identity abuse, deepfakes, and anomalous transaction behavior.</p></div>
           <div className="rounded-full border border-electric/25 bg-electric/10 px-4 py-2 font-mono text-[10px] font-bold tracking-widest text-cyan shadow-glow">● DEFENSE FABRIC ONLINE</div>
         </section>
 
