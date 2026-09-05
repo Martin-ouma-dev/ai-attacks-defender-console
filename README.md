@@ -10,6 +10,8 @@ The frontend is deployed by `.github/workflows/deploy.yml` after a push to `main
 
 The Pages frontend cannot safely host the Cloudflare API token or protection API. Run that API separately behind an authenticated server.
 
+The repository now includes an AKS-oriented Kubernetes baseline under `kubernetes/aks/` and a non-root API container image in `Dockerfile`. These manifests are deployment scaffolding, not a claim that a cluster, registry, ingress controller, managed identity, Azure Key Vault CSI driver, or SIEM connector already exists.
+
 ## Run the console
 
 ```powershell
@@ -49,3 +51,18 @@ The authenticated `POST /api/v1/telemetry/analyze` endpoint accepts a bounded te
 - Treat model output as advisory; deterministic policy and human approval boundaries remain authoritative.
 - Redact payment data, credentials, session tokens, and raw customer data before logging.
 - Deploy the core zone with deny-by-default network policy, mTLS, WAF controls, immutable audit logs, and least-privilege service identities.
+
+## AKS deployment implications
+
+The intended production shape is GitHub Pages for the static console plus an authenticated API in AKS. Before deploying, replace the image placeholder, create the namespace, load secrets from Azure Key Vault or an equivalent secret manager, configure an approved ingress/WAF path, and restrict CORS to the real console origin. Do not commit `secret.example.yaml` with real values. Kubernetes provides scheduling, health checks, replica recovery, autoscaling, and network policy; it does not by itself provide telemetry ingestion, quarantine authority, compliance retention, or a production-grade secret-management strategy.
+
+Example baseline commands:
+
+```powershell
+kubectl apply -f kubernetes/aks/namespace.yaml
+kubectl create secret generic defender-api-secrets -n ai-defender --from-env-file=.env
+kubectl apply -k kubernetes/aks
+kubectl rollout status deployment/defender-api -n ai-defender
+```
+
+Use Azure Workload Identity and Key Vault CSI in production instead of the local `kubectl create secret` example.

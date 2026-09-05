@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: defender-api
+  namespace: ai-defender
+spec:
+  type: ClusterIP
+  selector:
+    app: defender-api
+  ports:
+    - name: http
+      port: 8001
+      targetPort: http

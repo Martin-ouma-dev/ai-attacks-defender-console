@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: defender-api-config
+  namespace: ai-defender
+data:
+  ENVIRONMENT: "production"
+  PROTECTION_MODE: "live"
+  CORS_ORIGINS: "https://martin-ouma-dev.github.io"
+  AZURE_OPENAI_API_VERSION: "2024-10-21"
