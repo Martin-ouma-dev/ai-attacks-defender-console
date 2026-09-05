@@ -164,7 +164,6 @@ function App() {
             <div className="grid h-10 w-10 place-items-center rounded-xl border border-electric/70 bg-electric/10 text-electric shadow-glow"><ShieldCheck size={21} /></div>
             <div>
               <div className="text-sm font-extrabold tracking-tight text-cyan md:text-[17px]">AI-ATTACKS DEFENDER CONSOLE</div>
-              <div className="font-mono text-[9px] tracking-[.18em] text-slate/70">FINANCIAL SERVICES COMMAND</div>
             </div>
           </div>
           <div className="hidden items-center gap-3 rounded-full border border-electric/15 bg-electric/5 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" /> All protected zones operational</div>
