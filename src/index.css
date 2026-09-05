@@ -5,12 +5,24 @@
 
 @layer base {
   * { box-sizing: border-box; }
-  body { margin: 0; min-width: 320px; background: #071426; }
+  html { background: #050e1c; }
+  body {
+    margin: 0;
+    min-width: 320px;
+    background:
+      radial-gradient(circle at 72% -10%, rgba(56, 189, 248, .13), transparent 34rem),
+      radial-gradient(circle at 8% 18%, rgba(24, 65, 105, .18), transparent 30rem),
+      #071426;
+  }
   button { font: inherit; }
 }
 
 @layer components {
-  .panel { @apply rounded-xl border border-electric/15 bg-white/[.045] shadow-inner backdrop-blur-xl; }
+  .panel {
+    @apply rounded-2xl border border-white/[.09] bg-white/[.045] shadow-inner backdrop-blur-xl;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 18px 55px rgba(0,0,0,.14);
+  }
+  .panel:hover { border-color: rgba(56, 189, 248, .22); }
   .eyebrow { @apply font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-electric; }
   .scanline { @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-electric to-transparent opacity-50; animation: scan 4s linear infinite; }
 }

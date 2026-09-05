@@ -158,33 +158,33 @@ function App() {
   };
   return (
     <div className="min-h-screen bg-ink text-slate">
-      <header className="fixed inset-x-0 top-0 z-20 h-16 border-b border-electric/20 bg-ink/90 px-4 shadow-glow backdrop-blur-xl md:px-8">
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-between">
+      <header className="fixed inset-x-0 top-0 z-30 h-[72px] border-b border-white/10 bg-[#071426]/90 px-5 shadow-glow backdrop-blur-xl md:px-8">
+        <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between md:pl-3">
           <div className="flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-lg border border-electric/70 text-electric shadow-glow"><ShieldCheck size={21} /></div>
+            <div className="grid h-10 w-10 place-items-center rounded-xl border border-electric/70 bg-electric/10 text-electric shadow-glow"><ShieldCheck size={21} /></div>
             <div>
-              <div className="text-sm font-extrabold tracking-tight text-cyan md:text-base">AI-ATTACKS DEFENDER</div>
+              <div className="text-sm font-extrabold tracking-tight text-cyan md:text-[17px]">AI-ATTACKS DEFENDER</div>
               <div className="font-mono text-[9px] tracking-[.18em] text-slate/70">FINANCIAL SERVICES COMMAND</div>
             </div>
           </div>
-          <div className="hidden items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" /> All protected zones operational</div>
+          <div className="hidden items-center gap-3 rounded-full border border-electric/15 bg-electric/5 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" /> All protected zones operational</div>
           <button className="rounded-full border border-electric/20 p-2 text-electric transition hover:bg-electric/10" aria-label="Notifications"><Siren size={17} /></button>
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 pb-28 pt-24 md:px-8">
+      <main className="mx-auto max-w-[1440px] px-5 pb-28 pt-28 md:pl-[292px] md:pr-10 lg:pr-14">
         {active !== "Dashboard" && <div className="mb-7" />}
         {active === "Dashboard" ? <>
-        <section className="mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <section className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div><div className="eyebrow">Cyber Sentinel Alpha / Hybrid defense model</div><h1 className="mt-2 text-3xl font-bold tracking-tight text-white md:text-4xl">AI-Attacks Defender Console</h1><p className="mt-2 max-w-2xl text-sm text-slate">Continuous detection and containment for adversarial prompts, identity abuse, deepfakes, and anomalous transaction behavior.</p></div>
           <div className="rounded border border-electric/25 bg-electric/10 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-cyan">● DEFENSE FABRIC ONLINE</div>
         </section>
 
-        <div className="grid gap-4 lg:grid-cols-12">
-          <section className="panel relative overflow-hidden p-6 lg:col-span-5">
+        <div className="grid gap-5 xl:grid-cols-12">
+          <section className="panel relative overflow-hidden p-7 xl:col-span-5">
             <div className="scanline" />
             <div className="eyebrow text-center">Threat assessment score</div>
-            <div className="mx-auto my-7 grid h-52 w-52 place-items-center rounded-full border border-electric/40 shadow-[0_0_0_18px_rgba(56,189,248,.05),0_0_45px_rgba(56,189,248,.28)]">
+            <div className="mx-auto my-8 grid h-60 w-60 place-items-center rounded-full border border-electric/40 shadow-[0_0_0_18px_rgba(56,189,248,.05),0_0_45px_rgba(56,189,248,.28)]">
               <div className="grid h-40 w-40 place-items-center rounded-full border border-dashed border-electric/30"><div className="text-center"><ShieldEllipsis size={52} className="mx-auto text-electric" /><div className="mt-2 font-mono text-lg font-bold tracking-[.2em] text-cyan">SAFE</div></div></div>
             </div>
             <h2 className="text-center text-xl font-semibold text-white">System Protected</h2>
@@ -192,7 +192,7 @@ function App() {
             <div className="mt-6 grid grid-cols-3 gap-2"><Metric label="Blocked" value="1.2M" icon={ShieldCheck} /><Metric label="Agents" value="248" icon={Bot} /><Metric label="Risk" value="0.08" icon={Radar} /></div>
           </section>
 
-          <section className="panel flex min-h-[430px] flex-col lg:col-span-7">
+          <section className="panel flex min-h-[462px] flex-col xl:col-span-7">
             <div className="flex items-center justify-between border-b border-electric/15 bg-electric/5 px-5 py-4"><h2 className="flex items-center gap-2 font-semibold text-white"><TerminalSquare size={18} className="text-electric" /> Live intercepts</h2><span className="rounded-full bg-electric/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Intercepting</span></div>
             <div className="flex-1 divide-y divide-electric/10 overflow-auto">
               {incidents.map((incident) => <article key={incident.time} className="p-4 transition hover:bg-electric/[.03]"><div className="flex items-center justify-between gap-3"><span className="font-mono text-[11px] text-slate/70">{incident.time}</span><Severity value={incident.severity} /></div><div className="mt-2 flex gap-3"><AlertTriangle size={16} className="mt-0.5 shrink-0 text-electric" /><div className="min-w-0"><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 font-mono text-[11px] text-slate/70">ORIGIN: {incident.source} · AGENT: {incident.agent}</div><p className="mt-2 text-xs text-slate/80">{incident.detail}</p></div></div></article>)}
@@ -201,11 +201,11 @@ function App() {
           </section>
         </div>
 
-        <section className="mt-4 grid gap-4 md:grid-cols-3">
+        <section className="mt-5 grid gap-5 md:grid-cols-3">
           {[["PUBLIC INTERNET & DMZ", Globe2, "IP capture · Geo/reputation · WAF / DDoS"], ["SECURE APPLICATION ZONE", Database, "API gateways · Transaction feeds · Session analytics"], ["CORE FINANCIAL ZONE", LockKeyhole, "Isolated services · SIEM compliance · Containment"]].map(([title, Icon, text]) => <div className="panel p-5" key={title}><div className="flex items-center gap-3"><div className="rounded-lg bg-electric/10 p-2 text-electric"><Icon size={20} /></div><div><div className="font-mono text-[10px] font-bold tracking-widest text-cyan">{title}</div><div className="mt-1 text-xs text-slate/75">{text}</div></div></div><div className="mt-5 h-1 overflow-hidden rounded bg-panel2"><div className="h-full w-[96%] rounded bg-electric shadow-glow" /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTHY</span><span>96%</span></div></div>)}
         </section>
 
-        <section className="panel mt-4 p-5">
+        <section className="panel mt-5 p-6">
           <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
             <div>
               <div className="eyebrow">Public internet &amp; DMZ / monitored banking URLs</div>
@@ -231,12 +231,14 @@ function App() {
           </div>
         </section>
 
-        <section className="panel mt-4 p-5"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><div className="eyebrow">Automated defence core</div><h2 className="mt-1 text-lg font-semibold text-white">Response posture</h2><p className="mt-1 text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="flex cursor-pointer items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div><div className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded border border-electric/15 bg-panel2/60 p-4"><Activity size={17} className="text-electric" /><div className="mt-3 font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="mt-1 text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="rounded border border-electric/15 bg-panel2/60 p-4"><UserRoundCog size={17} className="text-electric" /><div className="mt-3 font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="mt-1 text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="rounded border border-electric/15 bg-panel2/60 p-4"><Database size={17} className="text-electric" /><div className="mt-3 font-mono text-xs font-bold text-white">System-level actions</div><div className="mt-1 text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div></section>
+        <section className="panel mt-5 p-6"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><div className="eyebrow">Automated defence core</div><h2 className="mt-1 text-lg font-semibold text-white">Response posture</h2><p className="mt-1 text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="flex cursor-pointer items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div><div className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded border border-electric/15 bg-panel2/60 p-4"><Activity size={17} className="text-electric" /><div className="mt-3 font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="mt-1 text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="rounded border border-electric/15 bg-panel2/60 p-4"><UserRoundCog size={17} className="text-electric" /><div className="mt-3 font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="mt-1 text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="rounded border border-electric/15 bg-panel2/60 p-4"><Database size={17} className="text-electric" /><div className="mt-3 font-mono text-xs font-bold text-white">System-level actions</div><div className="mt-1 text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div></section>
         </> : active === "Agents" ? <AgentsPage /> : active === "Logs" ? <LogsPage /> : <SettingsPage autoDefense={autoDefense} setAutoDefense={setAutoDefense} configuredUrls={configuredUrls} />}
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 flex justify-center gap-10 border-t border-electric/25 bg-panel/95 px-4 py-3 backdrop-blur-xl md:gap-20">
-        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => <button key={item} onClick={() => setActive(item)} className={`font-mono text-[10px] uppercase tracking-widest transition ${active === item ? "text-cyan [text-shadow:0_0_8px_rgba(56,189,248,.7)]" : "text-slate/70 hover:text-cyan"}`}><span className="block text-center text-base">{item === "Dashboard" ? "◉" : item === "Agents" ? "◈" : item === "Logs" ? "▤" : "⚙"}</span>{item}</button>)}
+      <nav className="fixed inset-x-0 bottom-0 z-20 flex justify-center gap-10 border-t border-electric/25 bg-panel/95 px-4 py-3 backdrop-blur-xl md:inset-x-auto md:bottom-0 md:left-0 md:top-[72px] md:flex md:w-64 md:flex-col md:justify-start md:gap-2 md:border-r md:border-t-0 md:px-5 md:py-8">
+        <div className="mb-5 hidden px-3 font-mono text-[9px] font-bold uppercase tracking-[.2em] text-slate/40 md:block">Command navigation</div>
+        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => <button key={item} onClick={() => setActive(item)} className={`rounded-xl px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest transition md:flex md:items-center md:gap-3 ${active === item ? "bg-electric/10 text-cyan shadow-[inset_3px_0_0_#38bdf8]" : "text-slate/70 hover:bg-white/[.04] hover:text-cyan"}`}><span className="block text-center text-base md:w-5">{item === "Dashboard" ? "◉" : item === "Agents" ? "◈" : item === "Logs" ? "▤" : "⚙"}</span>{item}</button>)}
+        <div className="mt-auto hidden rounded-xl border border-electric/10 bg-electric/5 p-4 md:block"><div className="eyebrow">Fabric status</div><div className="mt-3 flex items-center gap-2 text-xs font-semibold text-white"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" />Operational</div><div className="mt-2 font-mono text-[9px] text-slate/50">3 zones · 248 agents</div></div>
       </nav>
     </div>
   );
