@@ -13,8 +13,8 @@ export default {
         threat: "#ffb4ab",
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui"],
-        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
+        sans: ["DM Sans", "ui-sans-serif", "system-ui"],
+        mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
       },
       boxShadow: {
         glow: "0 0 28px rgba(56, 189, 248, .24)",
