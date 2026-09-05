@@ -38,6 +38,10 @@ For real verification, create a least-privilege Cloudflare API token for the acc
 
 Provisioning is staged: `POST /api/v1/protection/provision/plan?url=...` is always a dry run. Applying changes requires explicit confirmation plus server-side staging approval flags.
 
+## Azure OpenAI advisory analysis
+
+The authenticated `POST /api/v1/telemetry/analyze` endpoint accepts a bounded telemetry event and always runs deterministic detection and defence policy first. If `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, and `AZURE_OPENAI_DEPLOYMENT` are configured on the API server, Azure OpenAI returns an additional advisory summary. The model cannot change quarantine, MFA, rate-limit, or monitoring decisions. Sensitive fields and credential-like values are redacted before the request, and the API reports `not_configured` or `unavailable` instead of silently claiming AI coverage.
+
 ## Security baseline
 
 - Never commit `.env` files or credentials.

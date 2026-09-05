@@ -9,8 +9,11 @@ from urllib.parse import urlparse
 
 import httpx
 from dotenv import load_dotenv
-from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi import Body, Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+from src.server.azure_advisor import enrich
 
 load_dotenv()
 
@@ -21,6 +24,11 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["Authorization"],
 )
+
+
+class TelemetryEvent(BaseModel):
+    event_type: str = Field(min_length=1, max_length=128)
+    payload: dict = Field(default_factory=dict)
 
 
 def authenticate(authorization: str | None = Header(default=None)) -> None:
@@ -35,7 +43,17 @@ async def health():
         "status": "ok",
         "mode": os.getenv("PROTECTION_MODE", "live"),
         "cloudflare_configured": bool(os.getenv("CLOUDFLARE_API_TOKEN")),
+        "azure_openai_configured": all(
+            os.getenv(name, "").strip()
+            for name in ("AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_API_KEY", "AZURE_OPENAI_DEPLOYMENT")
+        ),
     }
+
+
+@app.post("/api/v1/telemetry/analyze")
+async def analyze_telemetry(event: TelemetryEvent = Body(...), _: None = Depends(authenticate)):
+    """Return deterministic enforcement plus optional Azure OpenAI advisory context."""
+    return await enrich({"event_type": event.event_type, "payload": event.payload})
 
 
 def public_addresses(hostname: str) -> list[str]:
