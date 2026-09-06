@@ -13,12 +13,12 @@ import {
   Radar,
   ScrollText,
   ShieldCheck,
-  ShieldEllipsis,
   Siren,
-  Settings2,
+  Settings,
   TerminalSquare,
   UserRoundCog,
   UsersRound,
+  Vault,
 } from "lucide-react";
 import "./index.css";
 
@@ -187,7 +187,7 @@ function App() {
             <div className="scanline" />
             <div className="eyebrow text-center">Threat assessment score</div>
             <div className="mx-auto my-7 grid h-52 w-52 place-items-center rounded-full border border-electric/40 shadow-[0_0_0_18px_rgba(56,189,248,.05),0_0_45px_rgba(56,189,248,.28)] sm:my-8 sm:h-60 sm:w-60">
-              <div className="grid h-40 w-40 place-items-center rounded-full border border-dashed border-electric/30"><div className="text-center"><ShieldEllipsis size={52} className="mx-auto text-electric" /><div className="mt-2 font-mono text-lg font-bold tracking-[.2em] text-cyan">SAFE</div></div></div>
+              <div className="grid h-40 w-40 place-items-center rounded-full border border-dashed border-electric/30"><div className="text-center"><Vault size={52} className="mx-auto text-electric" /><div className="mt-2 font-mono text-lg font-bold tracking-[.2em] text-cyan">SAFE</div></div></div>
             </div>
             <h2 className="text-center text-xl font-semibold text-white">System Protected</h2>
             <p className="mt-1 text-center font-mono text-[10px] uppercase tracking-widest text-slate/70">Zone isolation ready · 99.98% uptime</p>
@@ -240,7 +240,7 @@ function App() {
       <nav className="fixed inset-x-0 bottom-0 z-20 grid h-16 grid-cols-4 border-t border-electric/25 bg-panel/95 px-0.5 py-1.5 backdrop-blur-xl sm:h-[68px] md:inset-x-auto md:bottom-0 md:left-0 md:top-[72px] md:flex md:h-auto md:w-64 md:flex-col md:justify-start md:gap-2 md:border-r md:border-t-0 md:px-5 md:py-8">
         <div className="mb-5 hidden px-3 font-mono text-[9px] font-bold uppercase tracking-[.2em] text-slate/40 md:block">Command navigation</div>
         {["Dashboard", "Agents", "Logs", "Settings"].map((item) => {
-          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : Settings2;
+          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : Settings;
           return <button key={item} onClick={() => setActive(item)} className={`flex w-full min-w-0 flex-col items-center justify-center rounded-lg px-0.5 py-1 text-center font-mono text-[7px] uppercase leading-3 tracking-[-.02em] transition-all duration-200 ease-in-out sm:px-1 sm:text-[8px] sm:tracking-[.04em] md:flex-row md:items-center md:justify-start md:gap-3 md:rounded-xl md:px-4 md:py-3 md:text-left md:text-[10px] md:tracking-widest ${active === item ? "bg-electric/10 text-cyan shadow-[inset_0_2px_0_#38bdf8] md:shadow-[inset_3px_0_0_#38bdf8]" : "text-slate/70 hover:bg-white/[.04] hover:text-cyan"}`}><Icon size={16} strokeWidth={1.8} className="md:w-5" /><span className="max-w-full overflow-hidden text-ellipsis">{item}</span></button>;
         })}
         <div className="mt-auto hidden rounded-xl border border-electric/10 bg-electric/5 p-4 md:block"><div className="eyebrow">Fabric status</div><div className="mt-3 flex items-center gap-2 text-xs font-semibold text-white"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" />Operational</div><div className="mt-2 font-mono text-[9px] text-slate/50">3 zones · 248 agents</div></div>
