@@ -9,12 +9,16 @@ import {
   Globe2,
   LockKeyhole,
   Link2,
+  LayoutDashboard,
   Radar,
+  ScrollText,
   ShieldCheck,
   ShieldEllipsis,
   Siren,
+  Settings2,
   TerminalSquare,
   UserRoundCog,
+  UsersRound,
 } from "lucide-react";
 import "./index.css";
 
@@ -58,7 +62,7 @@ const initialConfiguredUrls = (import.meta.env.VITE_BANKING_URLS || "")
 
 function Metric({ label, value, icon: Icon }) {
   return (
-    <div className="rounded-lg border border-slate-700/40 bg-panel2/80 p-4">
+    <div className="rounded-xl border border-slate/20 bg-panel2/80 p-4 transition-all duration-200 ease-in-out hover:border-electric/30 hover:bg-panel2">
       <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[.16em] text-slate">
         {label}
         <Icon size={15} className="text-electric" />
@@ -74,14 +78,14 @@ function Severity({ value }) {
     HIGH: "border-threat/25 bg-threat/10 text-threat",
     MEDIUM: "border-slate-400/30 bg-slate-400/10 text-slate",
   };
-  return <span className={`rounded border px-2 py-1 text-[10px] font-bold tracking-widest ${colors[value] || colors.MEDIUM}`}>{value}</span>;
+  return <span className={`rounded border px-2 py-1 text-[10px] font-bold tracking-widest transition-all duration-200 ease-in-out ${colors[value] || colors.MEDIUM}`}>{value}</span>;
 }
 
 function InternalPage({ title, eyebrow, children }) {
   return (
-    <section>
+    <section className="animate-in">
       <div className="eyebrow">{eyebrow}</div>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">{title}</h1>
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white md:text-4xl">{title}</h1>
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -94,19 +98,19 @@ function AgentsPage() {
     ["GUARDIAN_CORE", "Deepfake and media integrity", "ISOLATED", "72%"],
   ];
   return <InternalPage title="Defence agents" eyebrow="Agent orchestration / secure application zone">
-    <div className="grid gap-4 md:grid-cols-3">{agents.map(([name, role, status, health]) => <article className="panel p-5" key={name}><div className="flex items-start justify-between"><Bot className="text-electric" size={22} /><span className="font-mono text-[10px] tracking-widest text-cyan">{status}</span></div><h2 className="mt-5 font-mono text-sm font-bold text-white">{name}</h2><p className="mt-2 text-xs text-slate/70">{role}</p><div className="mt-6 h-1 rounded bg-panel2"><div className="h-full rounded bg-electric" style={{ width: health }} /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTH</span><span>{health}</span></div></article>)}</div>
+    <div className="grid gap-4 md:grid-cols-3">{agents.map(([name, role, status, health]) => <article className="panel p-5 transition-all duration-200 ease-in-out hover:-translate-y-0.5" key={name}><div className="flex items-start justify-between"><Bot className="text-electric" size={22} /><span className="rounded-full border border-electric/20 bg-electric/5 px-2 py-1 font-mono text-[10px] tracking-widest text-cyan">{status}</span></div><h2 className="mt-5 font-mono text-sm font-bold text-white">{name}</h2><p className="mt-2 text-xs text-slate/70">{role}</p><div className="mt-6 h-1 rounded bg-panel2"><div className="h-full rounded bg-electric" style={{ width: health }} /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTH</span><span>{health}</span></div></article>)}</div>
   </InternalPage>;
 }
 
 function LogsPage() {
   return <InternalPage title="Security logs" eyebrow="Immutable audit ledger / core financial zone">
-    <div className="panel divide-y divide-electric/10">{incidents.concat(incidents).map((incident, index) => <div className="grid gap-2 p-4 md:grid-cols-[150px_1fr_100px]" key={`${incident.time}-${index}`}><span className="font-mono text-[11px] text-slate/60">{incident.time}</span><div><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 text-xs text-slate/70">{incident.detail}</div></div><Severity value={incident.severity} /></div>)}</div>
+    <div className="panel divide-y divide-slate-800 overflow-hidden">{incidents.concat(incidents).map((incident, index) => <div className="grid gap-3 p-4 transition-all duration-200 ease-in-out hover:bg-white/[.03] md:grid-cols-[150px_1fr_100px] md:items-center" key={`${incident.time}-${index}`}><span className="font-mono text-[11px] text-slate/60">{incident.time}</span><div><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 text-xs text-slate/70">{incident.detail}</div></div><Severity value={incident.severity} /></div>)}</div>
   </InternalPage>;
 }
 
 function SettingsPage({ autoDefense, setAutoDefense, configuredUrls }) {
   return <InternalPage title="Defence settings" eyebrow="Policy controls / least privilege">
-    <div className="grid gap-4 md:grid-cols-2"><div className="panel p-5"><h2 className="font-semibold text-white">Response controls</h2><label className="mt-5 flex items-center justify-between border-b border-electric/10 py-4 text-sm"><span>Autonomous defence</span><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /></label><label className="flex items-center justify-between border-b border-electric/10 py-4 text-sm"><span>Step-up MFA on high risk</span><input type="checkbox" defaultChecked className="h-4 w-4 accent-electric" /></label><label className="flex items-center justify-between py-4 text-sm"><span>Immutable audit forwarding</span><input type="checkbox" defaultChecked className="h-4 w-4 accent-electric" /></label></div><div className="panel p-5"><h2 className="font-semibold text-white">Approved banking URLs</h2>{configuredUrls.length > 0 ? configuredUrls.map((url) => <div className="mt-4 flex items-center gap-2 rounded border border-electric/15 bg-panel2/70 p-3 font-mono text-xs text-cyan" key={url}><Link2 size={14} />{url}</div>) : <p className="mt-4 rounded border border-threat/25 bg-threat/10 p-3 text-xs text-threat">No approved banking endpoints configured. Protection is not active.</p>}<p className="mt-5 text-xs text-slate/60">URL changes require a deployment-controlled registry update and WAF review.</p></div></div>
+    <div className="grid gap-4 md:grid-cols-2"><div className="panel p-5"><h2 className="font-semibold text-white">Response controls</h2><label className="mt-5 flex items-center justify-between border-b border-slate/20 py-4 text-sm transition-colors duration-200 hover:text-white"><span>Autonomous defence</span><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /></label><label className="flex items-center justify-between border-b border-slate/20 py-4 text-sm transition-colors duration-200 hover:text-white"><span>Step-up MFA on high risk</span><input type="checkbox" defaultChecked className="h-4 w-4 accent-electric" /></label><label className="flex items-center justify-between py-4 text-sm transition-colors duration-200 hover:text-white"><span>Immutable audit forwarding</span><input type="checkbox" defaultChecked className="h-4 w-4 accent-electric" /></label></div><div className="panel p-5"><h2 className="font-semibold text-white">Approved banking URLs</h2>{configuredUrls.length > 0 ? configuredUrls.map((url) => <div className="mt-4 flex items-center gap-2 rounded-lg border border-slate/20 bg-panel2/70 p-3 font-mono text-xs text-cyan transition-all duration-200 ease-in-out hover:border-electric/30" key={url}><Link2 size={14} />{url}</div>) : <p className="mt-4 rounded-lg border border-threat/25 bg-threat/10 p-3 text-xs text-threat">No approved banking endpoints configured. Protection is not active.</p>}<p className="mt-5 text-xs text-slate/60">URL changes require a deployment-controlled registry update and WAF review.</p></div></div>
   </InternalPage>;
 }
 
@@ -158,16 +162,16 @@ function App() {
   };
   return (
     <div className="min-h-screen bg-ink text-slate">
-      <header className="fixed inset-x-0 top-0 z-30 h-[72px] border-b border-white/10 bg-[#071426]/90 px-5 shadow-glow backdrop-blur-xl md:px-8">
+      <header className="fixed inset-x-0 top-0 z-30 h-[72px] border-b border-slate/20 bg-[#071426]/90 px-5 shadow-glow backdrop-blur-xl md:px-8">
         <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between md:pl-3">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-xl border border-electric/70 bg-electric/10 text-electric shadow-glow"><ShieldCheck size={21} /></div>
+            <div className="grid h-10 w-10 place-items-center rounded-xl border border-electric/70 bg-electric/10 text-electric shadow-glow transition-all duration-200 ease-in-out hover:bg-electric/20"><ShieldCheck size={21} /></div>
             <div>
               <div className="text-sm font-extrabold tracking-tight text-cyan md:text-[17px]">AI-ATTACKS DEFENDER CONSOLE</div>
             </div>
           </div>
           <div className="hidden items-center gap-3 rounded-full border border-electric/15 bg-electric/5 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" /> All protected zones operational</div>
-          <button className="rounded-full border border-electric/20 p-2 text-electric transition hover:bg-electric/10" aria-label="Notifications"><Siren size={17} /></button>
+          <button className="rounded-full border border-slate/20 p-2 text-electric transition-all duration-200 ease-in-out hover:border-electric/30 hover:bg-electric/10" aria-label="Notifications"><Siren size={17} /></button>
         </div>
       </header>
 
@@ -191,11 +195,11 @@ function App() {
           </section>
 
           <section className="panel flex min-h-[462px] flex-col xl:col-span-7">
-            <div className="flex items-center justify-between border-b border-electric/15 bg-electric/5 px-6 py-4"><h2 className="flex items-center gap-2 font-semibold tracking-tight text-white"><TerminalSquare size={18} className="text-electric" /> Live intercepts</h2><span className="rounded-full bg-electric/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Intercepting</span></div>
+            <div className="flex items-center justify-between border-b border-slate/20 bg-electric/5 px-6 py-4"><h2 className="flex items-center gap-2 font-semibold tracking-tight text-white"><TerminalSquare size={18} className="text-electric" /> Live intercepts</h2><span className="rounded-full border border-electric/20 bg-electric/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Intercepting</span></div>
             <div className="flex-1 divide-y divide-electric/10 overflow-auto">
               {incidents.map((incident) => <article key={incident.time} className="p-4 transition hover:bg-electric/[.03]"><div className="flex items-center justify-between gap-3"><span className="font-mono text-[11px] text-slate/70">{incident.time}</span><Severity value={incident.severity} /></div><div className="mt-2 flex gap-3"><AlertTriangle size={16} className="mt-0.5 shrink-0 text-electric" /><div className="min-w-0"><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 font-mono text-[11px] text-slate/70">ORIGIN: {incident.source} · AGENT: {incident.agent}</div><p className="mt-2 text-xs text-slate/80">{incident.detail}</p></div></div></article>)}
             </div>
-            <div className="flex items-center justify-between border-t border-electric/15 bg-ink/40 px-5 py-3"><span className="font-mono text-[10px] uppercase tracking-widest text-slate/70">3 events in retention window</span><button className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-widest text-cyan hover:text-white"><ArrowDownToLine size={14} /> Export JSON</button></div>
+            <div className="flex items-center justify-between border-t border-slate/20 bg-ink/40 px-5 py-3"><span className="font-mono text-[10px] uppercase tracking-widest text-slate/70">3 events in retention window</span><button className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-widest text-cyan transition-all duration-200 ease-in-out hover:text-white"><ArrowDownToLine size={14} /> Export JSON</button></div>
           </section>
         </div>
 
@@ -235,7 +239,10 @@ function App() {
 
       <nav className="fixed inset-x-0 bottom-0 z-20 grid h-16 grid-cols-4 border-t border-electric/25 bg-panel/95 px-0.5 py-1.5 backdrop-blur-xl sm:h-[68px] md:inset-x-auto md:bottom-0 md:left-0 md:top-[72px] md:flex md:h-auto md:w-64 md:flex-col md:justify-start md:gap-2 md:border-r md:border-t-0 md:px-5 md:py-8">
         <div className="mb-5 hidden px-3 font-mono text-[9px] font-bold uppercase tracking-[.2em] text-slate/40 md:block">Command navigation</div>
-        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => <button key={item} onClick={() => setActive(item)} className={`flex w-full min-w-0 flex-col items-center justify-center rounded-lg px-0.5 py-1 text-center font-mono text-[7px] uppercase leading-3 tracking-[-.02em] transition sm:px-1 sm:text-[8px] sm:tracking-[.04em] md:flex-row md:items-center md:justify-start md:gap-3 md:rounded-xl md:px-4 md:py-3 md:text-left md:text-[10px] md:tracking-widest ${active === item ? "bg-electric/10 text-cyan shadow-[inset_0_2px_0_#38bdf8] md:shadow-[inset_3px_0_0_#38bdf8]" : "text-slate/70 hover:bg-white/[.04] hover:text-cyan"}`}><span className="block text-center text-sm sm:text-base md:w-5">{item === "Dashboard" ? "◉" : item === "Agents" ? "◈" : item === "Logs" ? "▤" : "⚙"}</span><span className="max-w-full overflow-hidden text-ellipsis">{item}</span></button>)}
+        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => {
+          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : Settings2;
+          return <button key={item} onClick={() => setActive(item)} className={`flex w-full min-w-0 flex-col items-center justify-center rounded-lg px-0.5 py-1 text-center font-mono text-[7px] uppercase leading-3 tracking-[-.02em] transition-all duration-200 ease-in-out sm:px-1 sm:text-[8px] sm:tracking-[.04em] md:flex-row md:items-center md:justify-start md:gap-3 md:rounded-xl md:px-4 md:py-3 md:text-left md:text-[10px] md:tracking-widest ${active === item ? "bg-electric/10 text-cyan shadow-[inset_0_2px_0_#38bdf8] md:shadow-[inset_3px_0_0_#38bdf8]" : "text-slate/70 hover:bg-white/[.04] hover:text-cyan"}`}><Icon size={16} strokeWidth={1.8} className="md:w-5" /><span className="max-w-full overflow-hidden text-ellipsis">{item}</span></button>;
+        })}
         <div className="mt-auto hidden rounded-xl border border-electric/10 bg-electric/5 p-4 md:block"><div className="eyebrow">Fabric status</div><div className="mt-3 flex items-center gap-2 text-xs font-semibold text-white"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" />Operational</div><div className="mt-2 font-mono text-[9px] text-slate/50">3 zones · 248 agents</div></div>
       </nav>
     </div>

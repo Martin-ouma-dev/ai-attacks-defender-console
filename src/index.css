@@ -18,12 +18,12 @@
   }
   button { font: inherit; }
 }
-
 @layer components {
   .panel {
-    @apply rounded-2xl border border-white/[.09] bg-white/[.045] shadow-inner backdrop-blur-xl;
+    @apply rounded-2xl border border-slate/20 bg-white/[.045] shadow-inner backdrop-blur-xl;
     box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 18px 55px rgba(0,0,0,.14);
   }
+  .panel { transition: border-color 200ms ease-in-out, background-color 200ms ease-in-out, box-shadow 200ms ease-in-out; }
   .panel:hover { border-color: rgba(56, 189, 248, .22); }
   .eyebrow { @apply font-mono text-[10px] font-semibold uppercase tracking-[.18em] text-electric; }
   .scanline { @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-electric to-transparent opacity-50; animation: scan 4s linear infinite; }
