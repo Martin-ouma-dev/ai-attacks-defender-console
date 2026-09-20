@@ -64,11 +64,15 @@
 }
 
 @media (max-width: 767px) {
-  .console-header { padding-left: .75rem; padding-right: .75rem; }
-  .console-header .row.w-full { gap: .5rem; }
-  .brand-label { max-width: 118px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .command-bar { min-width: 0; width: auto; padding: .4rem; }
-  .command-label, .command-bar kbd { display: none; }
+  .console-header { min-height: 112px; padding: .75rem; }
+  .brand-label { max-width: none; font-size: 12px; }
+  .command-bar {
+    width: min(100%, 250px); min-height: 34px; justify-content: center;
+    border-color: #2d9ed0; background: #102530; color: #d3efff;
+    font-size: 11px; font-weight: 600;
+  }
+  .command-label, .command-bar kbd { display: inline; }
+  .command-bar kbd { margin-left: .35rem; }
   .console-body { flex-direction: column; }
   .console-sidebar { order: 2; width: 100%; border-right: 0; border-top: 1px solid #27313a; padding: .5rem; }
   .console-sidebar > .eyebrow, .console-sidebar > div:last-child { display: none; }
@@ -79,4 +83,7 @@
   .split { flex-wrap: wrap; }
   .compact-grid > * { min-width: min(220px, 100%); }
   .content-wrap .row { flex-wrap: wrap; }
+  .dashboard-heading { justify-content: center; text-align: center; }
+  .dashboard-heading > div { width: 100%; }
+  .dashboard-heading .row { justify-content: center; }
 }

@@ -234,7 +234,7 @@ function App() {
       <main className="content-stage">
       <div className="content-wrap">
         {active === "Dashboard" ? <>
-        <section className="split mb-4 border-b border-slate/20 pb-3">
+        <section className="dashboard-heading split mb-4 border-b border-slate/20 pb-3">
           <div><div className="eyebrow">Operations / overview</div><h1 className="mt-1 text-xl font-semibold text-white">Security posture</h1></div>
           <div className="row font-mono text-[10px] uppercase tracking-widest text-cyan"><span className="status-dot" /> Defense fabric online</div>
         </section>
