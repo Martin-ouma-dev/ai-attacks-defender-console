@@ -67,7 +67,7 @@ function Metric({ label, value, icon: Icon }) {
     <div className="metric-row border-l border-slate/20 pl-3">
       <div className="split text-[10px] font-mono uppercase tracking-[.12em] text-slate">
         {label}
-        <Icon size={14} className="text-electric" />
+        <Icon size={14} className="icon-accent" />
       </div>
       <div className="font-mono text-xl font-semibold text-cyan">{value}</div>
     </div>
@@ -100,7 +100,7 @@ function AgentsPage() {
     ["GUARDIAN_CORE", "Deepfake and media integrity", "ISOLATED", "72%"],
   ];
   return <InternalPage title="Defence agents" eyebrow="Agent orchestration / secure application zone">
-    <div className="grid gap-4 md:grid-cols-3">{agents.map(([name, role, status, health]) => <article className="panel p-5 transition-all duration-200 ease-in-out hover:-translate-y-0.5" key={name}><div className="flex items-start justify-between"><Bot className="text-electric" size={22} /><span className="rounded-full border border-electric/20 bg-electric/5 px-2 py-1 font-mono text-[10px] tracking-widest text-cyan">{status}</span></div><h2 className="mt-5 font-mono text-sm font-bold text-white">{name}</h2><p className="mt-2 text-xs text-slate/70">{role}</p><div className="mt-6 h-1 rounded bg-panel2"><div className="h-full rounded bg-electric" style={{ width: health }} /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTH</span><span>{health}</span></div></article>)}</div>
+    <div className="grid gap-4 md:grid-cols-3">{agents.map(([name, role, status, health]) => <article className="panel p-5 transition-all duration-200 ease-in-out hover:-translate-y-0.5" key={name}><div className="flex items-start justify-between"><Bot className="icon-accent" size={22} /><span className="rounded-full border border-electric/20 bg-electric/5 px-2 py-1 font-mono text-[10px] tracking-widest text-cyan">{status}</span></div><h2 className="mt-5 font-mono text-sm font-bold text-white">{name}</h2><p className="mt-2 text-xs text-slate/70">{role}</p><div className="mt-6 h-1 rounded bg-panel2"><div className="h-full rounded bg-electric" style={{ width: health }} /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTH</span><span>{health}</span></div></article>)}</div>
   </InternalPage>;
 }
 
@@ -134,7 +134,7 @@ function UrlProtectionPage({ configuredUrls, urlInput, setUrlInput, addUrl, live
           const live = liveProtection?.endpoints?.find((item) => item.url === url);
           const isDemo = live?.enforcement?.status === "demo";
           const isVerified = live?.enforcement?.status === "verified" && live.status === "reachable";
-          return <div className="stack gap-3 border border-slate-700/40 bg-panel2/70 px-3 py-3" key={url}><div className="split"><span className="truncate font-mono text-xs text-cyan">{url}</span><span className={`shrink-0 font-mono text-[10px] tracking-widest ${isVerified ? "text-electric" : isDemo ? "text-slate" : "text-threat"}`}>{isVerified ? "VERIFIED" : isDemo ? "DEMO" : "UNVERIFIED"}</span></div><div className="grid grid-cols-2 gap-2 text-[10px] font-mono uppercase tracking-widest text-slate/70 sm:grid-cols-5"><span>WAF {live?.enforcement?.controls?.waf ? "OK" : "—"}</span><span>Rate {live?.enforcement?.controls?.rate_limit ? "OK" : "—"}</span><span>DDoS {live?.enforcement?.controls?.ddos ? "OK" : "—"}</span><span>TLS {live?.enforcement?.controls?.tls_edge ? "OK" : live?.tls ? "REACHABLE" : "—"}</span><span>HTTP {live?.http_status || "—"}</span></div></div>;
+          return <div className="stack gap-3 border border-slate-700/40 bg-panel2/70 px-3 py-3" key={url}><div className="split"><span className="truncate font-mono text-xs text-cyan">{url}</span><span className={`shrink-0 font-mono text-[10px] tracking-widest ${isVerified ? "text-white" : isDemo ? "text-slate" : "text-threat"}`}>{isVerified ? "VERIFIED" : isDemo ? "DEMO" : "UNVERIFIED"}</span></div><div className="grid grid-cols-2 gap-2 text-[10px] font-mono uppercase tracking-widest text-slate/70 sm:grid-cols-5"><span>WAF {live?.enforcement?.controls?.waf ? "OK" : "—"}</span><span>Rate {live?.enforcement?.controls?.rate_limit ? "OK" : "—"}</span><span>DDoS {live?.enforcement?.controls?.ddos ? "OK" : "—"}</span><span>TLS {live?.enforcement?.controls?.tls_edge ? "OK" : live?.tls ? "REACHABLE" : "—"}</span><span>HTTP {live?.http_status || "—"}</span></div></div>;
         }) : <div className="border border-threat/25 bg-threat/10 p-4 text-xs text-threat">Configure BANKING_URLS and connect the DMZ WAF/API gateway before onboarding a real banking endpoint.</div>}
         <button onClick={checkProtection} disabled={checkingProtection} className="self-start rounded border border-electric/30 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-cyan hover:bg-electric/10 disabled:opacity-50">{checkingProtection ? "CHECKING LIVE CONTROLS..." : "CHECK LIVE PROTECTION"}</button>
       </div>
@@ -146,7 +146,7 @@ function ResponsePosturePage({ autoDefense, setAutoDefense }) {
   return <InternalPage title="Response posture" eyebrow="Automated defence core / containment controls">
     <section className="panel p-4">
       <div className="split"><div><p className="text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="row cursor-pointer border border-electric/20 bg-electric/5 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div>
-      <div className="compact-grid mt-4"><div className="stack gap-2 border-l border-electric/30 pl-3"><Activity size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><UserRoundCog size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><Database size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">System-level actions</div><div className="text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div>
+      <div className="compact-grid mt-4"><div className="stack gap-2 border-l border-electric/30 pl-3"><Activity size={16} className="icon-accent" /><div className="font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><UserRoundCog size={16} className="icon-accent" /><div className="font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><Database size={16} className="icon-accent" /><div className="font-mono text-xs font-bold text-white">System-level actions</div><div className="text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div>
     </section>
   </InternalPage>;
 }
@@ -218,7 +218,7 @@ function App() {
       <header className="console-header px-4 md:px-6">
         <div className="header-stack">
           <div className="row justify-center">
-            <ShieldCheck size={18} className="text-electric" />
+            <ShieldCheck size={18} className="icon-accent" />
             <div className="brand-label text-sm font-semibold tracking-tight text-white">AI-ATTACKS DEFENDER CONSOLE</div>
           </div>
           <button className="command-bar" onClick={() => setCommandOpen(true)} aria-label="Open command palette"><TerminalSquare size={14} /> <span className="command-label">Run command...</span><kbd>⌘K</kbd></button>
@@ -251,14 +251,14 @@ function App() {
         <div className="compact-grid">
           <section className="panel stack p-4">
             <div className="split"><div className="eyebrow">Threat assessment</div><span className="status-dot" /></div>
-            <div className="row"><Vault size={18} className="text-electric" /><span className="font-mono text-lg font-semibold tracking-widest text-cyan">SAFE</span><span className="text-xs text-slate">System protected · 99.98% uptime</span></div>
+            <div className="row"><Vault size={18} className="icon-accent" /><span className="font-mono text-lg font-semibold tracking-widest text-cyan">SAFE</span><span className="text-xs text-slate">System protected · 99.98% uptime</span></div>
             <div className="row pt-2"><Metric label="Blocked" value="1.2M" icon={ShieldCheck} /><Metric label="Agents" value="248" icon={Bot} /><Metric label="Risk" value="0.08" icon={Radar} /></div>
           </section>
 
           <section className="panel flex min-h-[300px] flex-1 flex-col">
-            <div className="flex items-center justify-between border-b border-slate/20 bg-electric/5 px-6 py-4"><h2 className="flex items-center gap-2 font-semibold tracking-tight text-white"><TerminalSquare size={18} className="text-electric" /> Live intercepts</h2><span className="rounded-full border border-electric/20 bg-electric/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Intercepting</span></div>
+            <div className="flex items-center justify-between border-b border-slate/20 bg-electric/5 px-6 py-4"><h2 className="flex items-center gap-2 font-semibold tracking-tight text-white"><TerminalSquare size={18} className="icon-accent" /> Live intercepts</h2><span className="rounded-full border border-electric/20 bg-electric/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Intercepting</span></div>
             <div className="flex-1 divide-y divide-electric/10 overflow-auto">
-              {incidents.map((incident) => <article key={incident.time} className="p-4 transition hover:bg-electric/[.03]"><div className="flex items-center justify-between gap-3"><span className="font-mono text-[11px] text-slate/70">{incident.time}</span><Severity value={incident.severity} /></div><div className="mt-2 flex gap-3"><AlertTriangle size={16} className="mt-0.5 shrink-0 text-electric" /><div className="min-w-0"><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 font-mono text-[11px] text-slate/70">ORIGIN: {incident.source} · AGENT: {incident.agent}</div><p className="mt-2 text-xs text-slate/80">{incident.detail}</p></div></div></article>)}
+              {incidents.map((incident) => <article key={incident.time} className="p-4 transition hover:bg-electric/[.03]"><div className="flex items-center justify-between gap-3"><span className="font-mono text-[11px] text-slate/70">{incident.time}</span><Severity value={incident.severity} /></div><div className="mt-2 flex gap-3"><AlertTriangle size={16} className="icon-accent mt-0.5 shrink-0" /><div className="min-w-0"><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 font-mono text-[11px] text-slate/70">ORIGIN: {incident.source} · AGENT: {incident.agent}</div><p className="mt-2 text-xs text-slate/80">{incident.detail}</p></div></div></article>)}
             </div>
             <div className="flex items-center justify-between border-t border-slate/20 bg-ink/40 px-5 py-3"><span className="font-mono text-[10px] uppercase tracking-widest text-slate/70">3 events in retention window</span><button className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-widest text-cyan transition-all duration-200 ease-in-out hover:text-white"><ArrowDownToLine size={14} /> Export JSON</button></div>
           </section>

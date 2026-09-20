@@ -42,6 +42,8 @@
   }
   .console-shell .text-white { color: var(--text-primary); }
   .console-shell .text-cyan { color: var(--text-primary); }
+  .console-shell .text-electric { color: var(--text-primary); }
+  .console-shell .icon-accent { color: #aab7bd; }
   .console-shell .text-slate,
   .console-shell .text-slate\/60,
   .console-shell .text-slate\/70,
