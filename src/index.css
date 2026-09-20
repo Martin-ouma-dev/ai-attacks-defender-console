@@ -27,10 +27,6 @@
     --text-primary: #f8f9fa;
     --text-secondary: #aeb8c2;
     --text-muted: #7d8b97;
-    --accent: #4fc3a1;
-    --accent-soft: #9bdaca;
-    --warning: #e4aa4f;
-    --critical: #e8756b;
     color: var(--text-secondary);
     background: var(--surface-0);
   }
@@ -43,13 +39,9 @@
     --text-primary: #1a1d20;
     --text-secondary: #394149;
     --text-muted: #65717b;
-    --accent: #087f6b;
-    --accent-soft: #0b6f60;
-    --warning: #9a6500;
-    --critical: #b33c34;
   }
   .console-shell .text-white { color: var(--text-primary); }
-  .console-shell .text-cyan { color: var(--accent-soft); }
+  .console-shell .text-cyan { color: var(--text-primary); }
   .console-shell .text-slate,
   .console-shell .text-slate\/60,
   .console-shell .text-slate\/70,
@@ -88,15 +80,8 @@
   .command-bar kbd { margin-left: auto; border: 1px solid var(--border); padding: 2px 5px; color: var(--text-secondary); font-size: 10px; }
   .theme-toggle { position: absolute; right: .75rem; top: .75rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: .45rem; }
   .status-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: #55c878; }
-  .status-dot.warn { background: var(--warning); }
-  .status-dot.critical { background: var(--critical); }
-  .console-shell .text-electric { color: var(--accent); }
-  .console-shell .bg-electric\/5 { background: color-mix(in srgb, var(--accent) 5%, transparent); }
-  .console-shell .bg-electric\/10 { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-  .console-shell .bg-electric\/15 { background: color-mix(in srgb, var(--accent) 15%, transparent); }
-  .console-shell .border-electric\/20 { border-color: color-mix(in srgb, var(--accent) 20%, transparent); }
-  .console-shell .border-electric\/25 { border-color: color-mix(in srgb, var(--accent) 25%, transparent); }
-  .console-shell .border-electric\/30 { border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+  .status-dot.warn { background: #e4a83a; }
+  .status-dot.critical { background: #e36b63; }
   .compact-grid { display: flex; min-width: 0; flex-wrap: wrap; gap: 1rem; }
   .compact-grid > * { min-width: 220px; flex: 1 1 0; }
   .data-table { width: 100%; border-collapse: collapse; }

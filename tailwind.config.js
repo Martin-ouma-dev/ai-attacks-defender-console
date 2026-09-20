@@ -7,10 +7,10 @@ export default {
         ink: "var(--surface-0)",
         panel: "var(--surface-2)",
         panel2: "var(--surface-3)",
-        cyan: "var(--accent-soft)",
-        electric: "var(--accent)",
+        cyan: "var(--text-primary)",
+        electric: "#aab7bd",
         slate: "var(--text-secondary)",
-        threat: "var(--critical)",
+        threat: "#a16f69",
       },
       fontFamily: {
         sans: ["JetBrains Mono", "ui-monospace", "monospace"],
