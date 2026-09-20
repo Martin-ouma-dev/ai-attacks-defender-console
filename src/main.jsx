@@ -114,6 +114,41 @@ function SettingsPage({ autoDefense, setAutoDefense, configuredUrls }) {
   </InternalPage>;
 }
 
+function UrlProtectionPage({ configuredUrls, urlInput, setUrlInput, addUrl, liveProtection, checkProtection, checkingProtection }) {
+  return <InternalPage title="URL protection registry" eyebrow="Public internet & DMZ / monitored banking URLs">
+    <section className="panel p-4">
+      <div className="split">
+        <p className="max-w-2xl text-xs text-slate/75">Only explicitly registered HTTPS endpoints are eligible for edge enforcement. The console does not claim protection for unregistered URLs.</p>
+        <span className={`shrink-0 border px-3 py-2 font-mono text-[10px] font-bold tracking-widest ${configuredUrls.length ? "border-electric/20 bg-electric/10 text-cyan" : "border-threat/25 bg-threat/10 text-threat"}`}>{configuredUrls.length ? `${configuredUrls.length} ENDPOINTS ENFORCED` : "NO ENDPOINTS ENFORCED"}</span>
+      </div>
+      <form onSubmit={addUrl} className="mt-4 flex flex-col gap-2 sm:flex-row">
+        <label htmlFor="banking-url" className="sr-only">Banking URL to protect</label>
+        <input id="banking-url" value={urlInput} onChange={(event) => setUrlInput(event.target.value)} placeholder="https://secure.yourbank.com" className="min-w-0 flex-1 rounded border border-slate-600 bg-ink/70 px-3 py-3 font-mono text-xs text-white outline-none placeholder:text-slate/50 focus:border-electric" />
+        <button type="submit" className="rounded border border-electric/40 bg-electric/10 px-4 py-3 font-mono text-[10px] font-bold tracking-widest text-cyan hover:bg-electric/20">ADD &amp; VERIFY URL</button>
+      </form>
+      <div className="stack mt-4">
+        {liveProtection?.status === "protected" ? <div className="border border-electric/25 bg-electric/10 p-3 font-mono text-xs text-cyan">LIVE VERIFIED: HTTPS reachable and Cloudflare WAF, rate limiting, DDoS, and TLS controls are present.</div> : liveProtection?.status === "demo" ? <div className="border border-slate-400/30 bg-slate-400/10 p-3 font-mono text-xs text-slate">DEMO MODE: HTTPS reachability was checked. No WAF, DDoS, rate-limit, or banking protection was verified.</div> : <div className="border border-threat/25 bg-threat/10 p-3 font-mono text-xs text-threat">{liveProtection?.status === "incomplete" ? "LIVE CHECK: endpoint reachable, but one or more Cloudflare controls are incomplete." : liveProtection?.status === "unavailable" ? `LIVE CHECK UNAVAILABLE: ${liveProtection.error}` : "LIVE protection has not been verified. Configure the protection API and Cloudflare credentials."}</div>}
+        {configuredUrls.length ? configuredUrls.map((url) => {
+          const live = liveProtection?.endpoints?.find((item) => item.url === url);
+          const isDemo = live?.enforcement?.status === "demo";
+          const isVerified = live?.enforcement?.status === "verified" && live.status === "reachable";
+          return <div className="stack gap-3 border border-slate-700/40 bg-panel2/70 px-3 py-3" key={url}><div className="split"><span className="truncate font-mono text-xs text-cyan">{url}</span><span className={`shrink-0 font-mono text-[10px] tracking-widest ${isVerified ? "text-electric" : isDemo ? "text-slate" : "text-threat"}`}>{isVerified ? "VERIFIED" : isDemo ? "DEMO" : "UNVERIFIED"}</span></div><div className="grid grid-cols-2 gap-2 text-[10px] font-mono uppercase tracking-widest text-slate/70 sm:grid-cols-5"><span>WAF {live?.enforcement?.controls?.waf ? "OK" : "—"}</span><span>Rate {live?.enforcement?.controls?.rate_limit ? "OK" : "—"}</span><span>DDoS {live?.enforcement?.controls?.ddos ? "OK" : "—"}</span><span>TLS {live?.enforcement?.controls?.tls_edge ? "OK" : live?.tls ? "REACHABLE" : "—"}</span><span>HTTP {live?.http_status || "—"}</span></div></div>;
+        }) : <div className="border border-threat/25 bg-threat/10 p-4 text-xs text-threat">Configure BANKING_URLS and connect the DMZ WAF/API gateway before onboarding a real banking endpoint.</div>}
+        <button onClick={checkProtection} disabled={checkingProtection} className="self-start rounded border border-electric/30 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-cyan hover:bg-electric/10 disabled:opacity-50">{checkingProtection ? "CHECKING LIVE CONTROLS..." : "CHECK LIVE PROTECTION"}</button>
+      </div>
+    </section>
+  </InternalPage>;
+}
+
+function ResponsePosturePage({ autoDefense, setAutoDefense }) {
+  return <InternalPage title="Response posture" eyebrow="Automated defence core / containment controls">
+    <section className="panel p-4">
+      <div className="split"><div><p className="text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="row cursor-pointer border border-electric/20 bg-electric/5 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div>
+      <div className="compact-grid mt-4"><div className="stack gap-2 border-l border-electric/30 pl-3"><Activity size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><UserRoundCog size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><Database size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">System-level actions</div><div className="text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div>
+    </section>
+  </InternalPage>;
+}
+
 function App() {
   const [active, setActive] = React.useState("Dashboard");
   const [commandOpen, setCommandOpen] = React.useState(false);
@@ -175,25 +210,22 @@ function App() {
   return (
     <div className="console-shell">
       <header className="console-header px-4 md:px-6">
-        <div className="row w-full">
-          <div className="flex items-center gap-3">
+        <div className="header-stack">
+          <div className="row justify-center">
             <ShieldCheck size={18} className="text-electric" />
-            <div>
-              <div className="text-sm font-semibold tracking-tight text-white">AI-ATTACKS DEFENDER CONSOLE</div>
-            </div>
+            <div className="brand-label text-sm font-semibold tracking-tight text-white">AI-ATTACKS DEFENDER CONSOLE</div>
           </div>
-          <button className="command-bar" onClick={() => setCommandOpen(true)} aria-label="Open command palette"><TerminalSquare size={14} /> <span>Run command...</span><kbd>⌘K</kbd></button>
-          <div className="row hidden font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="status-dot" /> Protected zones operational</div>
-          <button className="border-0 bg-transparent p-1 text-slate hover:text-white" aria-label="Notifications"><Siren size={16} /></button>
+          <button className="command-bar" onClick={() => setCommandOpen(true)} aria-label="Open command palette"><TerminalSquare size={14} /> <span className="command-label">Run command...</span><kbd>⌘K</kbd></button>
         </div>
+        <div className="header-status row hidden font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="status-dot" /> Protected zones operational <button className="border-0 bg-transparent p-1 text-slate hover:text-white" aria-label="Notifications"><Siren size={16} /></button></div>
       </header>
 
       <div className="console-body">
       <nav className="console-sidebar p-4">
         <div className="eyebrow px-2">Command navigation</div>
         <div className="stack gap-1">
-        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => {
-          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : Settings;
+        {["Dashboard", "Agents", "Logs", "URL Protection", "Response Posture", "Settings"].map((item) => {
+          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : item === "URL Protection" ? Link2 : item === "Response Posture" ? Activity : Settings;
           return <button key={item} onClick={() => setActive(item)} className={`row w-full border-0 px-2 py-2 text-left font-mono text-[10px] uppercase tracking-widest ${active === item ? "bg-electric/10 text-cyan" : "bg-transparent text-slate/70 hover:bg-white/[.04] hover:text-white"}`}><Icon size={15} /><span>{item}</span></button>;
         })}
         </div>
@@ -227,34 +259,7 @@ function App() {
           {[["PUBLIC INTERNET & DMZ", Globe2, "IP capture · Geo/reputation · WAF / DDoS"], ["SECURE APPLICATION ZONE", Database, "API gateways · Transaction feeds · Session analytics"], ["CORE FINANCIAL ZONE", LockKeyhole, "Isolated services · SIEM compliance · Containment"]].map(([title, Icon, text]) => <div className="panel p-6" key={title}><div className="flex items-start gap-4"><div className="rounded-xl bg-electric/10 p-3 text-electric"><Icon size={20} /></div><div><div className="font-mono text-[10px] font-bold tracking-widest text-cyan">{title}</div><div className="mt-2 text-xs leading-5 text-slate/75">{text}</div></div></div><div className="mt-6 h-1 overflow-hidden rounded bg-panel2"><div className="h-full w-[96%] rounded bg-electric shadow-glow" /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTHY</span><span>96%</span></div></div>)}
         </section>
 
-        <section className="panel mt-5 p-6">
-          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
-            <div>
-              <div className="eyebrow">Public internet &amp; DMZ / monitored banking URLs</div>
-              <h2 className="mt-1 flex items-center gap-2 text-lg font-semibold tracking-tight text-white"><Link2 size={18} className="text-electric" /> URL protection registry</h2>
-              <p className="mt-1 text-xs text-slate/75">Only explicitly registered HTTPS endpoints are eligible for edge enforcement. The console does not claim protection for unregistered URLs.</p>
-            </div>
-            <span className={`rounded border px-3 py-2 font-mono text-[10px] font-bold tracking-widest ${configuredUrls.length ? "border-electric/20 bg-electric/10 text-cyan" : "border-threat/25 bg-threat/10 text-threat"}`}>{configuredUrls.length ? `${configuredUrls.length} ENDPOINTS ENFORCED` : "NO ENDPOINTS ENFORCED"}</span>
-          </div>
-          <form onSubmit={addUrl} className="mt-4 flex flex-col gap-2 sm:flex-row">
-            <label htmlFor="banking-url" className="sr-only">Banking URL to protect</label>
-            <input id="banking-url" value={urlInput} onChange={(event) => setUrlInput(event.target.value)} placeholder="https://secure.yourbank.com" className="min-w-0 flex-1 rounded border border-slate-600 bg-ink/70 px-3 py-3 font-mono text-xs text-white outline-none placeholder:text-slate/50 focus:border-electric" />
-            <button type="submit" className="rounded border border-electric/40 bg-electric/10 px-4 py-3 font-mono text-[10px] font-bold tracking-widest text-cyan hover:bg-electric/20">ADD &amp; VERIFY URL</button>
-          </form>
-          <div className="stack">
-            {liveProtection?.status === "protected" ? <div className="mb-3 rounded border border-electric/25 bg-electric/10 p-3 font-mono text-xs text-cyan">LIVE VERIFIED: HTTPS reachable and Cloudflare WAF, rate limiting, DDoS, and TLS controls are present.</div> : liveProtection?.status === "demo" ? <div className="mb-3 rounded border border-slate-400/30 bg-slate-400/10 p-3 font-mono text-xs text-slate">DEMO MODE: HTTPS reachability was checked. No WAF, DDoS, rate-limit, or banking protection was verified.</div> : <div className="mb-3 rounded border border-threat/25 bg-threat/10 p-3 font-mono text-xs text-threat">{liveProtection?.status === "incomplete" ? "LIVE CHECK: endpoint reachable, but one or more Cloudflare controls are incomplete." : liveProtection?.status === "unavailable" ? `LIVE CHECK UNAVAILABLE: ${liveProtection.error}` : "LIVE protection has not been verified. Configure the protection API and Cloudflare credentials."}</div>}
-            {configuredUrls.length ? configuredUrls.map((url) => {
-              const live = liveProtection?.endpoints?.find((item) => item.url === url);
-              const isDemo = live?.enforcement?.status === "demo";
-              const isVerified = live?.enforcement?.status === "verified" && live.status === "reachable";
-              return <div className="flex flex-col gap-3 rounded border border-slate-700/40 bg-panel2/70 px-3 py-3" key={url}><div className="flex items-center justify-between gap-3"><span className="truncate font-mono text-xs text-cyan">{url}</span><span className={`ml-3 shrink-0 font-mono text-[10px] tracking-widest ${isVerified ? "text-electric" : isDemo ? "text-slate" : "text-threat"}`}>{isVerified ? "VERIFIED" : isDemo ? "DEMO" : "UNVERIFIED"}</span></div><div className="grid grid-cols-2 gap-2 text-[10px] font-mono uppercase tracking-widest text-slate/70 sm:grid-cols-5"><span>WAF {live?.enforcement?.controls?.waf ? "OK" : "—"}</span><span>Rate {live?.enforcement?.controls?.rate_limit ? "OK" : "—"}</span><span>DDoS {live?.enforcement?.controls?.ddos ? "OK" : "—"}</span><span>TLS {live?.enforcement?.controls?.tls_edge ? "OK" : live?.tls ? "REACHABLE" : "—"}</span><span>HTTP {live?.http_status || "—"}</span></div></div>;
-            }) : <div className="rounded border border-threat/25 bg-threat/10 p-4 text-xs text-threat">Configure BANKING_URLS and connect the DMZ WAF/API gateway before onboarding a real banking endpoint.</div>}
-            <button onClick={checkProtection} disabled={checkingProtection} className="mt-3 rounded border border-electric/30 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-cyan hover:bg-electric/10 disabled:opacity-50">{checkingProtection ? "CHECKING LIVE CONTROLS..." : "CHECK LIVE PROTECTION"}</button>
-          </div>
-        </section>
-
-        <section className="panel mt-5 p-6"><div className="split"><div><div className="eyebrow">Automated defence core</div><h2 className="mt-1 text-lg font-semibold tracking-tight text-white">Response posture</h2><p className="mt-1 text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="row cursor-pointer border border-electric/20 bg-electric/5 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div><div className="compact-grid mt-4"><div className="stack gap-2 border-l border-electric/30 pl-3"><Activity size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><UserRoundCog size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><Database size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">System-level actions</div><div className="text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div></section>
-        </> : active === "Agents" ? <AgentsPage /> : active === "Logs" ? <LogsPage /> : <SettingsPage autoDefense={autoDefense} setAutoDefense={setAutoDefense} configuredUrls={configuredUrls} />}
+        </> : active === "Agents" ? <AgentsPage /> : active === "Logs" ? <LogsPage /> : active === "URL Protection" ? <UrlProtectionPage configuredUrls={configuredUrls} urlInput={urlInput} setUrlInput={setUrlInput} addUrl={addUrl} liveProtection={liveProtection} checkProtection={checkProtection} checkingProtection={checkingProtection} /> : active === "Response Posture" ? <ResponsePosturePage autoDefense={autoDefense} setAutoDefense={setAutoDefense} /> : <SettingsPage autoDefense={autoDefense} setAutoDefense={setAutoDefense} configuredUrls={configuredUrls} />}
       </div>
       </main>
       </div>
@@ -262,7 +267,7 @@ function App() {
         <div className="command-menu" onClick={(event) => event.stopPropagation()}>
           <div className="split border-b border-slate/20 p-3"><span className="mono text-xs text-white">Command palette</span><kbd className="mono text-[10px] text-slate">ESC</kbd></div>
           <div className="stack gap-0 p-2">
-            {["Dashboard", "Agents", "Logs", "Settings"].map((item) => <button key={item} onClick={() => { setActive(item); setCommandOpen(false); }} className="row border-0 bg-transparent px-3 py-3 text-left text-sm text-slate hover:bg-electric/10 hover:text-white"><span className="mono w-20 text-[10px] text-slate/60">GO TO</span>{item}</button>)}
+            {["Dashboard", "Agents", "Logs", "URL Protection", "Response Posture", "Settings"].map((item) => <button key={item} onClick={() => { setActive(item); setCommandOpen(false); }} className="row border-0 bg-transparent px-3 py-3 text-left text-sm text-slate hover:bg-electric/10 hover:text-white"><span className="mono w-20 text-[10px] text-slate/60">GO TO</span>{item}</button>)}
           </div>
         </div>
       </div>}
