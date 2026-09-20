@@ -4,13 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#071426",
-        panel: "#0d1d31",
-        panel2: "#14283f",
-        cyan: "#8ed5ff",
-        electric: "#38bdf8",
-        slate: "#bdc8d1",
-        threat: "#ffb4ab",
+        ink: "var(--surface-0)",
+        panel: "var(--surface-2)",
+        panel2: "var(--surface-3)",
+        cyan: "var(--text-primary)",
+        electric: "#aab7bd",
+        slate: "var(--text-secondary)",
+        threat: "#a16f69",
       },
       fontFamily: {
         sans: ["DM Sans", "ui-sans-serif", "system-ui"],
