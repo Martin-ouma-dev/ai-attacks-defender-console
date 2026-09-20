@@ -13,8 +13,8 @@ export default {
         threat: "var(--critical)",
       },
       fontFamily: {
-        sans: ["DM Sans", "ui-sans-serif", "system-ui"],
-        mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
+        sans: ["JetBrains Mono", "ui-monospace", "monospace"],
+        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
       boxShadow: {
         glow: "0 0 20px color-mix(in srgb, var(--accent) 22%, transparent)",

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +12,7 @@
     min-width: 320px;
     background: #0b0f13;
     color: #f8f9fa;
-    font-family: "DM Sans", sans-serif;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
   }
   button, input { font: inherit; }
 }
@@ -78,12 +78,12 @@
     gap: 1rem; border-bottom: 1px solid var(--border); padding: .75rem 1rem;
   }
   .metric-row { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: .25rem; }
-  .eyebrow { color: var(--text-muted); font: 600 10px/1.2 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
-  .mono { font-family: "IBM Plex Mono", monospace; }
+  .eyebrow { color: var(--text-muted); font: 600 10px/1.2 "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+  .mono { font-family: "JetBrains Mono", monospace; }
   .command-bar {
     display: flex; min-width: 180px; flex: 1; align-items: center; gap: .5rem;
     max-width: 460px; border: 1px solid var(--border); border-radius: 3px; background: var(--surface-0);
-    padding: .4rem .6rem; color: var(--text-muted); font: 11px "IBM Plex Mono", monospace;
+    padding: .4rem .6rem; color: var(--text-muted); font: 11px "JetBrains Mono", monospace;
   }
   .command-bar kbd { margin-left: auto; border: 1px solid var(--border); padding: 2px 5px; color: var(--text-secondary); font-size: 10px; }
   .theme-toggle { position: absolute; right: .75rem; top: .75rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: .45rem; }
@@ -101,7 +101,7 @@
   .compact-grid > * { min-width: 220px; flex: 1 1 0; }
   .data-table { width: 100%; border-collapse: collapse; }
   .data-table th, .data-table td { border-bottom: 1px solid #27313a; padding: .65rem 1rem; text-align: left; }
-  .data-table th { color: #7d8b97; font: 600 10px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+  .data-table th { color: #7d8b97; font: 600 10px "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
   .data-table tr:last-child td { border-bottom: 0; }
   .command-overlay { position: fixed; inset: 0; z-index: 50; display: grid; place-items: start center; padding-top: 12vh; background: rgba(5, 8, 11, .72); }
   .command-menu { width: min(560px, calc(100vw - 2rem)); border: 1px solid #46535f; border-radius: 3px; background: #151c22; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
