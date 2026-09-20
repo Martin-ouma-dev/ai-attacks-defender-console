@@ -18,16 +18,47 @@
 }
 
 @layer components {
+  .console-shell {
+    --surface-0: #0b0f13;
+    --surface-1: #0e1318;
+    --surface-2: #10151a;
+    --surface-3: #11171c;
+    --border: #27313a;
+    --text-primary: #f8f9fa;
+    --text-secondary: #aeb8c2;
+    --text-muted: #7d8b97;
+    color: var(--text-secondary);
+    background: var(--surface-0);
+  }
+  .console-shell[data-theme="light"] {
+    --surface-0: #f8f9fa;
+    --surface-1: #eef1f3;
+    --surface-2: #ffffff;
+    --surface-3: #ffffff;
+    --border: #cbd3d9;
+    --text-primary: #1a1d20;
+    --text-secondary: #394149;
+    --text-muted: #65717b;
+  }
+  .console-shell[data-theme="light"] .text-white,
+  .console-shell[data-theme="light"] .text-cyan {
+    color: var(--text-primary) !important;
+  }
+  .console-shell[data-theme="light"] .text-slate,
+  .console-shell[data-theme="light"] .text-slate\/70,
+  .console-shell[data-theme="light"] .text-slate\/75 {
+    color: var(--text-secondary) !important;
+  }
   .console-shell { display: flex; min-height: 100vh; flex-direction: column; }
   .console-header {
     position: relative; display: flex; flex-shrink: 0; align-items: center; justify-content: center;
-    min-height: 92px; border-bottom: 1px solid #27313a; background: #10151a;
+    min-height: 92px; border-bottom: 1px solid var(--border); background: var(--surface-2);
   }
   .header-stack { display: flex; flex-direction: column; align-items: center; gap: .4rem; }
   .console-body { display: flex; min-width: 0; flex: 1; flex-direction: row; }
   .console-sidebar {
     display: flex; flex-shrink: 0; flex-direction: column; gap: 1rem;
-    width: 224px; border-right: 1px solid #27313a; background: #0e1318;
+    width: 224px; border-right: 1px solid var(--border); background: var(--surface-1);
   }
   .content-stage { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 1rem; }
   .content-wrap { width: 100%; max-width: 1480px; margin: 0 auto; padding: 1.25rem 1.5rem 2.5rem; }
@@ -35,14 +66,14 @@
   .row { display: flex; min-width: 0; flex-direction: row; align-items: center; gap: .75rem; }
   .split { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 1rem; }
   .panel {
-    min-width: 0; border: 1px solid #27313a; border-radius: 3px; background: #11171c;
+    min-width: 0; border: 1px solid var(--border); border-radius: 3px; background: var(--surface-3);
   }
   .panel-header {
     display: flex; min-width: 0; align-items: center; justify-content: space-between;
     gap: 1rem; border-bottom: 1px solid #27313a; padding: .75rem 1rem;
   }
   .metric-row { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: .25rem; }
-  .eyebrow { color: #7d8b97; font: 600 10px/1.2 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+  .eyebrow { color: var(--text-muted); font: 600 10px/1.2 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
   .mono { font-family: "IBM Plex Mono", monospace; }
   .command-bar {
     display: flex; min-width: 180px; flex: 1; align-items: center; gap: .5rem;
@@ -50,6 +81,7 @@
     padding: .4rem .6rem; color: #7d8b97; font: 11px "IBM Plex Mono", monospace;
   }
   .command-bar kbd { margin-left: auto; border: 1px solid #35414b; padding: 2px 5px; color: #aeb8c2; font-size: 10px; }
+  .theme-toggle { position: absolute; right: .75rem; top: .75rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: .45rem; }
   .status-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: #55c878; }
   .status-dot.warn { background: #e4a83a; }
   .status-dot.critical { background: #e36b63; }
@@ -74,7 +106,7 @@
   .command-label, .command-bar kbd { display: inline; }
   .command-bar kbd { margin-left: .35rem; }
   .console-body { flex-direction: column; }
-  .console-sidebar { order: 2; width: 100%; border-right: 0; border-top: 1px solid #27313a; padding: .5rem; }
+  .console-sidebar { order: 2; width: 100%; border-right: 0; border-top: 1px solid var(--border); padding: .5rem; }
   .console-sidebar > .eyebrow, .console-sidebar > div:last-child { display: none; }
   .console-sidebar > .stack { flex-direction: row; gap: .25rem; }
   .console-sidebar > .stack { overflow-x: auto; }

@@ -15,6 +15,8 @@ import {
   ShieldCheck,
   Siren,
   Settings,
+  Sun,
+  Moon,
   TerminalSquare,
   UserRoundCog,
   UsersRound,
@@ -152,6 +154,7 @@ function ResponsePosturePage({ autoDefense, setAutoDefense }) {
 function App() {
   const [active, setActive] = React.useState("Dashboard");
   const [commandOpen, setCommandOpen] = React.useState(false);
+  const [theme, setTheme] = React.useState(() => localStorage.getItem("defender-theme") || "dark");
   const [autoDefense, setAutoDefense] = React.useState(true);
   const [configuredUrls, setConfiguredUrls] = React.useState(() => {
     try {
@@ -182,6 +185,9 @@ function App() {
     localStorage.setItem("defender-approved-urls", JSON.stringify(configuredUrls));
   }, [configuredUrls]);
   React.useEffect(() => {
+    localStorage.setItem("defender-theme", theme);
+  }, [theme]);
+  React.useEffect(() => {
     const onKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
@@ -208,7 +214,7 @@ function App() {
     }
   };
   return (
-    <div className="console-shell">
+    <div className="console-shell" data-theme={theme}>
       <header className="console-header px-4 md:px-6">
         <div className="header-stack">
           <div className="row justify-center">
@@ -217,6 +223,9 @@ function App() {
           </div>
           <button className="command-bar" onClick={() => setCommandOpen(true)} aria-label="Open command palette"><TerminalSquare size={14} /> <span className="command-label">Run command...</span><kbd>⌘K</kbd></button>
         </div>
+        <button className="theme-toggle" onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
+          {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
         <div className="header-status row hidden font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="status-dot" /> Protected zones operational <button className="border-0 bg-transparent p-1 text-slate hover:text-white" aria-label="Notifications"><Siren size={16} /></button></div>
       </header>
 
