@@ -62,12 +62,12 @@ const initialConfiguredUrls = (import.meta.env.VITE_BANKING_URLS || "")
 
 function Metric({ label, value, icon: Icon }) {
   return (
-    <div className="rounded-xl border border-slate/20 bg-panel2/80 p-4 transition-all duration-200 ease-in-out hover:border-electric/30 hover:bg-panel2">
-      <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[.16em] text-slate">
+    <div className="metric-row border-l border-slate/20 pl-3">
+      <div className="split text-[10px] font-mono uppercase tracking-[.12em] text-slate">
         {label}
-        <Icon size={15} className="text-electric" />
+        <Icon size={14} className="text-electric" />
       </div>
-      <div className="mt-2 text-2xl font-bold text-cyan">{value}</div>
+      <div className="font-mono text-xl font-semibold text-cyan">{value}</div>
     </div>
   );
 }
@@ -78,7 +78,7 @@ function Severity({ value }) {
     HIGH: "border-threat/25 bg-threat/10 text-threat",
     MEDIUM: "border-slate-400/30 bg-slate-400/10 text-slate",
   };
-  return <span className={`rounded border px-2 py-1 text-[10px] font-bold tracking-widest transition-all duration-200 ease-in-out ${colors[value] || colors.MEDIUM}`}>{value}</span>;
+  return <span className={`border px-2 py-1 text-[10px] font-bold tracking-widest ${colors[value] || colors.MEDIUM}`}>{value}</span>;
 }
 
 function InternalPage({ title, eyebrow, children }) {
@@ -116,6 +116,7 @@ function SettingsPage({ autoDefense, setAutoDefense, configuredUrls }) {
 
 function App() {
   const [active, setActive] = React.useState("Dashboard");
+  const [commandOpen, setCommandOpen] = React.useState(false);
   const [autoDefense, setAutoDefense] = React.useState(true);
   const [configuredUrls, setConfiguredUrls] = React.useState(() => {
     try {
@@ -145,6 +146,17 @@ function App() {
   React.useEffect(() => {
     localStorage.setItem("defender-approved-urls", JSON.stringify(configuredUrls));
   }, [configuredUrls]);
+  React.useEffect(() => {
+    const onKeyDown = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandOpen((open) => !open);
+      }
+      if (event.key === "Escape") setCommandOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
   const addUrl = (event) => {
     event.preventDefault();
     try {
@@ -161,40 +173,48 @@ function App() {
     }
   };
   return (
-    <div className="min-h-screen bg-ink text-slate">
-      <header className="fixed inset-x-0 top-0 z-30 h-[72px] border-b border-slate/20 bg-[#071426]/90 px-5 shadow-glow backdrop-blur-xl md:px-8">
-        <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between md:pl-3">
+    <div className="console-shell">
+      <header className="console-header px-4 md:px-6">
+        <div className="row w-full">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-xl border border-electric/70 bg-electric/10 text-electric shadow-glow transition-all duration-200 ease-in-out hover:bg-electric/20"><ShieldCheck size={21} /></div>
+            <ShieldCheck size={18} className="text-electric" />
             <div>
-              <div className="text-sm font-extrabold tracking-tight text-cyan md:text-[17px]">AI-ATTACKS DEFENDER CONSOLE</div>
+              <div className="text-sm font-semibold tracking-tight text-white">AI-ATTACKS DEFENDER CONSOLE</div>
             </div>
           </div>
-          <div className="hidden items-center gap-3 rounded-full border border-electric/15 bg-electric/5 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" /> All protected zones operational</div>
-          <button className="rounded-full border border-slate/20 p-2 text-electric transition-all duration-200 ease-in-out hover:border-electric/30 hover:bg-electric/10" aria-label="Notifications"><Siren size={17} /></button>
+          <button className="command-bar" onClick={() => setCommandOpen(true)} aria-label="Open command palette"><TerminalSquare size={14} /> <span>Run command...</span><kbd>⌘K</kbd></button>
+          <div className="row hidden font-mono text-[10px] uppercase tracking-widest text-slate md:flex"><span className="status-dot" /> Protected zones operational</div>
+          <button className="border-0 bg-transparent p-1 text-slate hover:text-white" aria-label="Notifications"><Siren size={16} /></button>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1440px] px-4 pb-28 pt-24 sm:px-5 md:pl-[292px] md:pr-10 lg:pr-14">
-        {active !== "Dashboard" && <div className="mb-7" />}
+      <div className="console-body">
+      <nav className="console-sidebar p-4">
+        <div className="eyebrow px-2">Command navigation</div>
+        <div className="stack gap-1">
+        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => {
+          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : Settings;
+          return <button key={item} onClick={() => setActive(item)} className={`row w-full border-0 px-2 py-2 text-left font-mono text-[10px] uppercase tracking-widest ${active === item ? "bg-electric/10 text-cyan" : "bg-transparent text-slate/70 hover:bg-white/[.04] hover:text-white"}`}><Icon size={15} /><span>{item}</span></button>;
+        })}
+        </div>
+        <div className="mt-auto hidden border-t border-slate/20 pt-4 md:block"><div className="eyebrow">Fabric status</div><div className="row mt-2 text-xs font-semibold text-white"><span className="status-dot" />Operational</div><div className="mt-2 font-mono text-[9px] text-slate/50">3 zones · 248 agents</div></div>
+      </nav>
+      <main className="content-stage">
+      <div className="content-wrap">
         {active === "Dashboard" ? <>
-        <section className="mb-5 flex justify-center">
-          <div className="rounded-full border border-electric/25 bg-electric/10 px-4 py-2 text-center font-mono text-[10px] font-bold tracking-widest text-cyan shadow-glow">● DEFENSE FABRIC ONLINE</div>
+        <section className="split mb-4 border-b border-slate/20 pb-3">
+          <div><div className="eyebrow">Operations / overview</div><h1 className="mt-1 text-xl font-semibold text-white">Security posture</h1></div>
+          <div className="row font-mono text-[10px] uppercase tracking-widest text-cyan"><span className="status-dot" /> Defense fabric online</div>
         </section>
 
-        <div className="grid gap-5 xl:grid-cols-12">
-          <section className="panel relative overflow-hidden p-5 sm:p-7 xl:col-span-5">
-            <div className="scanline" />
-            <div className="eyebrow text-center">Threat assessment score</div>
-            <div className="mx-auto my-7 grid h-52 w-52 place-items-center rounded-full border border-electric/40 shadow-[0_0_0_18px_rgba(56,189,248,.05),0_0_45px_rgba(56,189,248,.28)] sm:my-8 sm:h-60 sm:w-60">
-              <div className="grid h-40 w-40 place-items-center rounded-full border border-dashed border-electric/30"><div className="text-center"><Vault size={52} className="mx-auto text-electric" /><div className="mt-2 font-mono text-lg font-bold tracking-[.2em] text-cyan">SAFE</div></div></div>
-            </div>
-            <h2 className="text-center text-xl font-semibold text-white">System Protected</h2>
-            <p className="mt-1 text-center font-mono text-[10px] uppercase tracking-widest text-slate/70">Zone isolation ready · 99.98% uptime</p>
-            <div className="mt-7 grid grid-cols-3 gap-3"><Metric label="Blocked" value="1.2M" icon={ShieldCheck} /><Metric label="Agents" value="248" icon={Bot} /><Metric label="Risk" value="0.08" icon={Radar} /></div>
+        <div className="compact-grid">
+          <section className="panel stack p-4">
+            <div className="split"><div className="eyebrow">Threat assessment</div><span className="status-dot" /></div>
+            <div className="row"><Vault size={18} className="text-electric" /><span className="font-mono text-lg font-semibold tracking-widest text-cyan">SAFE</span><span className="text-xs text-slate">System protected · 99.98% uptime</span></div>
+            <div className="row pt-2"><Metric label="Blocked" value="1.2M" icon={ShieldCheck} /><Metric label="Agents" value="248" icon={Bot} /><Metric label="Risk" value="0.08" icon={Radar} /></div>
           </section>
 
-          <section className="panel flex min-h-[462px] flex-col xl:col-span-7">
+          <section className="panel flex min-h-[300px] flex-1 flex-col">
             <div className="flex items-center justify-between border-b border-slate/20 bg-electric/5 px-6 py-4"><h2 className="flex items-center gap-2 font-semibold tracking-tight text-white"><TerminalSquare size={18} className="text-electric" /> Live intercepts</h2><span className="rounded-full border border-electric/20 bg-electric/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-cyan">Intercepting</span></div>
             <div className="flex-1 divide-y divide-electric/10 overflow-auto">
               {incidents.map((incident) => <article key={incident.time} className="p-4 transition hover:bg-electric/[.03]"><div className="flex items-center justify-between gap-3"><span className="font-mono text-[11px] text-slate/70">{incident.time}</span><Severity value={incident.severity} /></div><div className="mt-2 flex gap-3"><AlertTriangle size={16} className="mt-0.5 shrink-0 text-electric" /><div className="min-w-0"><div className="font-mono text-xs font-bold text-cyan">{incident.type}</div><div className="mt-1 font-mono text-[11px] text-slate/70">ORIGIN: {incident.source} · AGENT: {incident.agent}</div><p className="mt-2 text-xs text-slate/80">{incident.detail}</p></div></div></article>)}
@@ -203,7 +223,7 @@ function App() {
           </section>
         </div>
 
-        <section className="mt-5 grid gap-5 md:grid-cols-3">
+        <section className="compact-grid">
           {[["PUBLIC INTERNET & DMZ", Globe2, "IP capture · Geo/reputation · WAF / DDoS"], ["SECURE APPLICATION ZONE", Database, "API gateways · Transaction feeds · Session analytics"], ["CORE FINANCIAL ZONE", LockKeyhole, "Isolated services · SIEM compliance · Containment"]].map(([title, Icon, text]) => <div className="panel p-6" key={title}><div className="flex items-start gap-4"><div className="rounded-xl bg-electric/10 p-3 text-electric"><Icon size={20} /></div><div><div className="font-mono text-[10px] font-bold tracking-widest text-cyan">{title}</div><div className="mt-2 text-xs leading-5 text-slate/75">{text}</div></div></div><div className="mt-6 h-1 overflow-hidden rounded bg-panel2"><div className="h-full w-[96%] rounded bg-electric shadow-glow" /></div><div className="mt-2 flex justify-between font-mono text-[10px] text-slate/60"><span>HEALTHY</span><span>96%</span></div></div>)}
         </section>
 
@@ -221,7 +241,7 @@ function App() {
             <input id="banking-url" value={urlInput} onChange={(event) => setUrlInput(event.target.value)} placeholder="https://secure.yourbank.com" className="min-w-0 flex-1 rounded border border-slate-600 bg-ink/70 px-3 py-3 font-mono text-xs text-white outline-none placeholder:text-slate/50 focus:border-electric" />
             <button type="submit" className="rounded border border-electric/40 bg-electric/10 px-4 py-3 font-mono text-[10px] font-bold tracking-widest text-cyan hover:bg-electric/20">ADD &amp; VERIFY URL</button>
           </form>
-          <div className="mt-4 grid gap-2 md:grid-cols-2">
+          <div className="stack">
             {liveProtection?.status === "protected" ? <div className="mb-3 rounded border border-electric/25 bg-electric/10 p-3 font-mono text-xs text-cyan">LIVE VERIFIED: HTTPS reachable and Cloudflare WAF, rate limiting, DDoS, and TLS controls are present.</div> : liveProtection?.status === "demo" ? <div className="mb-3 rounded border border-slate-400/30 bg-slate-400/10 p-3 font-mono text-xs text-slate">DEMO MODE: HTTPS reachability was checked. No WAF, DDoS, rate-limit, or banking protection was verified.</div> : <div className="mb-3 rounded border border-threat/25 bg-threat/10 p-3 font-mono text-xs text-threat">{liveProtection?.status === "incomplete" ? "LIVE CHECK: endpoint reachable, but one or more Cloudflare controls are incomplete." : liveProtection?.status === "unavailable" ? `LIVE CHECK UNAVAILABLE: ${liveProtection.error}` : "LIVE protection has not been verified. Configure the protection API and Cloudflare credentials."}</div>}
             {configuredUrls.length ? configuredUrls.map((url) => {
               const live = liveProtection?.endpoints?.find((item) => item.url === url);
@@ -233,18 +253,19 @@ function App() {
           </div>
         </section>
 
-        <section className="panel mt-5 p-6"><div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left"><div><div className="eyebrow">Automated defence core</div><h2 className="mt-1 text-lg font-semibold tracking-tight text-white">Response posture</h2><p className="mt-1 text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="flex cursor-pointer items-center gap-3 rounded-full border border-electric/20 bg-electric/5 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div><div className="mt-6 grid gap-4 md:grid-cols-3"><div className="rounded-xl border border-electric/15 bg-panel2/60 p-5"><Activity size={17} className="text-electric" /><div className="mt-4 font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="mt-1 text-xs leading-5 text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="rounded-xl border border-electric/15 bg-panel2/60 p-5"><UserRoundCog size={17} className="text-electric" /><div className="mt-4 font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="mt-1 text-xs leading-5 text-slate/70">Isolate user and force step-up MFA.</div></div><div className="rounded-xl border border-electric/15 bg-panel2/60 p-5"><Database size={17} className="text-electric" /><div className="mt-4 font-mono text-xs font-bold text-white">System-level actions</div><div className="mt-1 text-xs leading-5 text-slate/70">SIEM event and compliance audit log.</div></div></div></section>
+        <section className="panel mt-5 p-6"><div className="split"><div><div className="eyebrow">Automated defence core</div><h2 className="mt-1 text-lg font-semibold tracking-tight text-white">Response posture</h2><p className="mt-1 text-xs text-slate/75">High-confidence events are contained at IP, session, and system levels.</p></div><label className="row cursor-pointer border border-electric/20 bg-electric/5 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-cyan"><input type="checkbox" checked={autoDefense} onChange={(event) => setAutoDefense(event.target.checked)} className="h-4 w-4 accent-electric" /> Autonomous defence</label></div><div className="compact-grid mt-4"><div className="stack gap-2 border-l border-electric/30 pl-3"><Activity size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">IP-level mitigation</div><div className="text-xs text-slate/70">Block traffic and rate-limit at WAF.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><UserRoundCog size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">Session-level mitigation</div><div className="text-xs text-slate/70">Isolate user and force step-up MFA.</div></div><div className="stack gap-2 border-l border-electric/30 pl-3"><Database size={16} className="text-electric" /><div className="font-mono text-xs font-bold text-white">System-level actions</div><div className="text-xs text-slate/70">SIEM event and compliance audit log.</div></div></div></section>
         </> : active === "Agents" ? <AgentsPage /> : active === "Logs" ? <LogsPage /> : <SettingsPage autoDefense={autoDefense} setAutoDefense={setAutoDefense} configuredUrls={configuredUrls} />}
+      </div>
       </main>
-
-      <nav className="fixed inset-x-0 bottom-0 z-20 grid h-16 grid-cols-4 border-t border-electric/25 bg-panel/95 px-0.5 py-1.5 backdrop-blur-xl sm:h-[68px] md:inset-x-auto md:bottom-0 md:left-0 md:top-[72px] md:flex md:h-auto md:w-64 md:flex-col md:justify-start md:gap-2 md:border-r md:border-t-0 md:px-5 md:py-8">
-        <div className="mb-5 hidden px-3 font-mono text-[9px] font-bold uppercase tracking-[.2em] text-slate/40 md:block">Command navigation</div>
-        {["Dashboard", "Agents", "Logs", "Settings"].map((item) => {
-          const Icon = item === "Dashboard" ? LayoutDashboard : item === "Agents" ? UsersRound : item === "Logs" ? ScrollText : Settings;
-          return <button key={item} onClick={() => setActive(item)} className={`flex w-full min-w-0 flex-col items-center justify-center rounded-lg px-0.5 py-1 text-center font-mono text-[7px] uppercase leading-3 tracking-[-.02em] transition-all duration-200 ease-in-out sm:px-1 sm:text-[8px] sm:tracking-[.04em] md:flex-row md:items-center md:justify-start md:gap-3 md:rounded-xl md:px-4 md:py-3 md:text-left md:text-[10px] md:tracking-widest ${active === item ? "bg-electric/10 text-cyan shadow-[inset_0_2px_0_#38bdf8] md:shadow-[inset_3px_0_0_#38bdf8]" : "text-slate/70 hover:bg-white/[.04] hover:text-cyan"}`}><Icon size={16} strokeWidth={1.8} className="md:w-5" /><span className="max-w-full overflow-hidden text-ellipsis">{item}</span></button>;
-        })}
-        <div className="mt-auto hidden rounded-xl border border-electric/10 bg-electric/5 p-4 md:block"><div className="eyebrow">Fabric status</div><div className="mt-3 flex items-center gap-2 text-xs font-semibold text-white"><span className="h-2 w-2 animate-pulse rounded-full bg-electric" />Operational</div><div className="mt-2 font-mono text-[9px] text-slate/50">3 zones · 248 agents</div></div>
-      </nav>
+      </div>
+      {commandOpen && <div className="command-overlay" onClick={() => setCommandOpen(false)}>
+        <div className="command-menu" onClick={(event) => event.stopPropagation()}>
+          <div className="split border-b border-slate/20 p-3"><span className="mono text-xs text-white">Command palette</span><kbd className="mono text-[10px] text-slate">ESC</kbd></div>
+          <div className="stack gap-0 p-2">
+            {["Dashboard", "Agents", "Logs", "Settings"].map((item) => <button key={item} onClick={() => { setActive(item); setCommandOpen(false); }} className="row border-0 bg-transparent px-3 py-3 text-left text-sm text-slate hover:bg-electric/10 hover:text-white"><span className="mono w-20 text-[10px] text-slate/60">GO TO</span>{item}</button>)}
+          </div>
+        </div>
+      </div>}
     </div>
   );
 }
